@@ -1,11 +1,11 @@
 const app = require('./app');
 const mongoose = require('mongoose');
-const { login } = process.env;
+const { LOGIN, PORT } = process.env;
 
 mongoose
-  .connect(login)
+  .connect(LOGIN)
   .then(() =>
-    app.listen(3000, () => {
+    app.listen(PORT, () => {
       console.log('Server running. Use our API on port: 3000');
     }),
   )
