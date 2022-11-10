@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 const createError = require("http-errors");
 const User  = require("../models/user");
 const jwt = require("jsonwebtoken");
+const gravatar = require("gravatar");
 
 const dotenv = require("dotenv");
 dotenv.config();
@@ -14,11 +15,12 @@ const signup = async (req, res) => {
   if (user) {
     throw createError(409, `This ${email} is already in use`);
   }
-
+  const avatarURL = gravatar.url(email);
   const hashPassword = await bcrypt.hash(password, 10);
   const data = await User.create({
     email: email,
     password: hashPassword,
+    avatarURL
   });
 
   res.status(201).json({
@@ -48,12 +50,13 @@ const login = async (req, res) => {
 
     const payload = { id: user._id };
     const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
-    await User.findByIdAndUpdate(user._id, { token });
+    await User.findByIdAndUpdate(user._id, { token: token });
 	
   res.status(200).json({
-      message: "successfull logged into base",
+    message: "successfull logged into base",
+    token: token,
         user: {
-            email: user.email,
+          email: user.email,
         }
     })
 }

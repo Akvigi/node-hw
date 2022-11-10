@@ -20,7 +20,8 @@ const addContact = async (req, res, next) => {
     if (error) {
       error.status = 400;
       throw error;
-    }
+  }
+
     const resp = await Contact.create(req.body);
     res.status(201).json(resp);
 };
