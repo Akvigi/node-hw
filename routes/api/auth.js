@@ -17,4 +17,12 @@ router.post("/login", validation(schemas.loginSchema),
 router.get("/logout", authmid,
     ctrlWrapper(ctrl.logout));
 
+router.get("/verify/:verificationToken", ctrlWrapper(ctrl.verify));
+
+router.post(
+  "/verify",
+  validation(schemas.verifyEmailSchema),
+  ctrlWrapper(ctrl.resendEmail)
+);
+
 module.exports = router;
